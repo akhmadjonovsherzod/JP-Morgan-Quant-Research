@@ -1,0 +1,14 @@
+# Environment
+.env
+
+# Generated model artifacts (regenerate with `python model/train_model.py`)
+model/credit_model.joblib
+model/metrics.json
+
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# OS
+.DS_Store

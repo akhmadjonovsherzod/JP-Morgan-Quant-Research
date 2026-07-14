@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Credit Risk Console</title>
+<link rel="stylesheet" href="/static/style.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <span class="brand-mark">◆</span>
+      <span class="brand-name">Credit Risk Console</span>
+    </div>
+    <span id="db-status" class="db-status">checking database…</span>
+  </div>
+</header>
+
+<main class="layout">
+
+  <!-- ===================== SCORE A BORROWER ===================== -->
+  <section class="panel score-panel" aria-labelledby="score-heading">
+    <h1 id="score-heading">Score a borrower</h1>
+    <p class="panel-sub">Enter loan details to get probability of default, a credit rating, and expected loss.</p>
+
+    <form id="score-form" class="score-form">
+      <div class="field">
+        <label for="customer_id">Customer ID</label>
+        <input type="number" id="customer_id" required value="8153374" />
+      </div>
+      <div class="field">
+        <label for="fico_score">FICO score</label>
+        <input type="number" id="fico_score" min="300" max="850" required value="605" />
+      </div>
+      <div class="field">
+        <label for="income">Annual income ($)</label>
+        <input type="number" id="income" min="1" step="0.01" required value="78039.40" />
+      </div>
+      <div class="field">
+        <label for="years_employed">Years employed</label>
+        <input type="number" id="years_employed" min="0" required value="5" />
+      </div>
+      <div class="field">
+        <label for="loan_amt_outstanding">Loan amount outstanding ($)</label>
+        <input type="number" id="loan_amt_outstanding" min="0.01" step="0.01" required value="5221.50" />
+      </div>
+      <div class="field">
+        <label for="total_debt_outstanding">Total debt outstanding ($)</label>
+        <input type="number" id="total_debt_outstanding" min="0" step="0.01" required value="3915.50" />
+      </div>
+      <div class="field">
+        <label for="credit_lines_outstanding">Credit lines outstanding</label>
+        <input type="number" id="credit_lines_outstanding" min="0" required value="0" />
+      </div>
+
+      <button type="submit" class="btn-primary">Score borrower</button>
+    </form>
+
+    <div id="result" class="result hidden" aria-live="polite">
+      <div class="result-top">
+        <span id="result-badge" class="badge">—</span>
+        <span id="result-customer" class="result-customer"></span>
+      </div>
+      <div class="result-grid">
+        <div class="result-stat">
+          <span class="stat-label">Probability of default</span>
+          <span id="result-pd" class="stat-value">—</span>
+        </div>
+        <div class="result-stat">
+          <span class="stat-label">Credit rating</span>
+          <span id="result-rating" class="stat-value">—</span>
+        </div>
+        <div class="result-stat">
+          <span class="stat-label">Expected loss</span>
+          <span id="result-el" class="stat-value">—</span>
+        </div>
+      </div>
+      <p id="result-note" class="result-note"></p>
+    </div>
+
+    <div id="form-error" class="form-error hidden"></div>
+  </section>
+
+  <!-- ===================== PORTFOLIO INSIGHTS ===================== -->
+  <section class="panel insights-panel" aria-labelledby="insights-heading">
+    <div class="insights-header">
+      <div>
+        <h2 id="insights-heading">Portfolio insights</h2>
+        <p class="panel-sub">Live view across every loan currently in the database.</p>
+      </div>
+      <button id="score-all-btn" class="btn-secondary">Score all loans</button>
+    </div>
+
+    <div class="kpi-row" id="kpi-row">
+      <div class="kpi">
+        <span class="kpi-label">Total loans</span>
+        <span id="kpi-total-loans" class="kpi-value">—</span>
+      </div>
+      <div class="kpi">
+        <span class="kpi-label">Scored</span>
+        <span id="kpi-total-scored" class="kpi-value">—</span>
+      </div>
+      <div class="kpi">
+        <span class="kpi-label">Avg. probability of default</span>
+        <span id="kpi-avg-pd" class="kpi-value">—</span>
+      </div>
+      <div class="kpi">
+        <span class="kpi-label">Total expected loss</span>
+        <span id="kpi-total-el" class="kpi-value">—</span>
+      </div>
+      <div class="kpi">
+        <span class="kpi-label">High risk share</span>
+        <span id="kpi-high-risk" class="kpi-value">—</span>
+      </div>
+    </div>
+
+    <div class="charts-row">
+      <div class="chart-card">
+        <h3>Default rate by FICO band</h3>
+        <canvas id="fico-chart" height="220"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3>Borrowers by credit rating</h3>
+        <canvas id="rating-chart" height="220"></canvas>
+        <p id="rating-empty" class="empty-note hidden">No borrowers scored yet — click "Score all loans" above.</p>
+      </div>
+    </div>
+
+    <div class="table-card">
+      <h3>Top 10 by expected loss</h3>
+      <table id="top-risk-table">
+        <thead>
+          <tr>
+            <th>Customer ID</th>
+            <th>FICO</th>
+            <th>Income</th>
+            <th>PD</th>
+            <th>Rating</th>
+            <th>Expected loss</th>
+          </tr>
+        </thead>
+        <tbody id="top-risk-body">
+          <tr><td colspan="6" class="empty-note">No borrowers scored yet.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+</main>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

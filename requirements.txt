@@ -1,0 +1,20 @@
+# Core data / ML (used by the notebooks and model/train_model.py)
+pandas>=2.0
+numpy>=1.24
+scikit-learn>=1.3
+xgboost>=2.0
+matplotlib>=3.7
+seaborn>=0.12
+joblib>=1.3
+
+# Database
+psycopg2-binary>=2.9
+python-dotenv>=1.0
+
+# ETL
+prefect>=2.14
+
+# API
+fastapi>=0.104
+uvicorn[standard]>=0.24
+pydantic>=2.4
